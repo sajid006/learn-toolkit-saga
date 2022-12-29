@@ -1,13 +1,28 @@
+import createSagaMiddleware from '@redux-saga/core';
+import { configureStore } from '@reduxjs/toolkit';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './index.css';
+import { Provider } from 'react-redux';
 import App from './App';
+import catSaga from './catSaga';
+import catsReducer from './catState';
+import './index.css';
 import reportWebVitals from './reportWebVitals';
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const saga = createSagaMiddleware();
+const store = configureStore({
+  reducer: {
+    cats: catsReducer
+  },
+  middleware: [saga]
+});
+saga.run(catSaga);
 root.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>
 );
 
